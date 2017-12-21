@@ -1,5 +1,5 @@
 ---
-title: "hw2_PartA_Satish_Chirra"
+title: "US Mass Shooting - EDA"
 author: "Satish"
 date: "10/3/2017"
 output: pdf_document
