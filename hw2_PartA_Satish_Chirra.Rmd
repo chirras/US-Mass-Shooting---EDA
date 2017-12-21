@@ -44,9 +44,8 @@ head(data_ms,10)
 ```
 
 
-# Problem 2
-
 Step 1: Perform exploratory data analysis on the dataset, using the techniques learned in class. Calculate summary statistics that are of interest to you and create plots using ggplot2 that show your findings.
+
 ```{r}
 
 # Year wise mass shooting in USA
