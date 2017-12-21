@@ -30,7 +30,7 @@ require(plotly)
 ```{r}
 
 # Loading US Mass Shooting Data to a dataframe
-data_ms <- read_csv('/Users/satishreddychirra/Document/Data Management & Processing/HW MV/Mass Shootings Dataset.csv')
+data_ms <- read_csv('Data.csv')
 
 ```
 
@@ -44,9 +44,9 @@ head(data_ms,10)
 ```
 
 
-# Problem 2
 
 Step 1: Perform exploratory data analysis on the dataset, using the techniques learned in class. Calculate summary statistics that are of interest to you and create plots using ggplot2 that show your findings.
+
 ```{r}
 
 # Year wise mass shooting in USA
@@ -60,7 +60,8 @@ colnames(df_msy) <- c('Year','Total_Victims')
 # Plotting mass shooting victims per year in USA
 yw <- ggplot(data=df_msy, mapping = aes(x = Year, y = Total_Victims)) +
         geom_bar(stat = "identity") + 
-        xlab("Year") + ylab("Number of Victims") + labs(title = "Mass shooting victims per year in USA") +
+        xlab("Year") + ylab("Number of Victims") + 
+        labs(title = "Mass shooting victims per year in USA") +
         theme(axis.text.x = element_text(angle = 90)) 
 
 yw
@@ -77,7 +78,8 @@ statesUSA <- map_data("state")
 ms <- ggplot(data = statesUSA) + 
         geom_polygon(aes(x = long, y = lat, group = group), fill = NA, color = "black") +
         coord_map() + 
-        geom_point(data = na.omit(data_ms), aes(x =Longitude, y = Latitude, color = `Total victims`)) +
+        geom_point(data = na.omit(data_ms), 
+                   aes(x =Longitude, y = Latitude, color = `Total victims`)) +
         scale_x_continuous(limits = c(-125,-68)) +
         scale_y_continuous(limits = c(25,50)) +
         scale_colour_gradientn(colours = terrain.colors(10)) + 
@@ -92,7 +94,9 @@ ms
 
 
 # Representing the column in a uniform notation
-data_ms$Gender <- ifelse(data_ms$Gender == 'Female','F',ifelse(data_ms$Gender == 'Male','M',ifelse(data_ms$Gender == 'Male/Female','M/F',ifelse(data_ms$Gender == 'Unknown','Unknown',NA))))
+data_ms$Gender <- ifelse(data_ms$Gender == 'Female','F',
+                    ifelse(data_ms$Gender == 'Male','M',ifelse(data_ms$Gender == 
+                    'Male/Female','M/F',ifelse(data_ms$Gender == 'Unknown','Unknown',NA))))
 
 data_hs <- data_ms %>%
               group_by(tolower(`Mental Health Issues`), Gender) %>%
