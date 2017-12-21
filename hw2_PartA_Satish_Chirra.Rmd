@@ -1,0 +1,187 @@
+---
+title: "hw2_PartA_Satish_Chirra"
+author: "Satish"
+date: "10/3/2017"
+output: pdf_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+
+```{r, eval=FALSE}
+
+install.packages("tidyr")
+install.packages("tidyverse")
+install.packages("plotly")
+
+```
+
+```{r, warning=FALSE, message=FALSE}
+
+require(tidyr)
+require(tidyverse)
+require(plotly)
+
+```
+
+
+```{r}
+
+# Loading US Mass Shooting Data to a dataframe
+data_ms <- read_csv('/Users/satishreddychirra/Document/Data Management & Processing/HW MV/Mass Shootings Dataset.csv')
+
+```
+
+
+
+```{r}
+
+# Displaying first 10 records from the dataset
+head(data_ms,10)
+
+```
+
+
+# Problem 2
+
+Step 1: Perform exploratory data analysis on the dataset, using the techniques learned in class. Calculate summary statistics that are of interest to you and create plots using ggplot2 that show your findings.
+```{r}
+
+# Year wise mass shooting in USA
+df_msy <- data_ms %>%
+            select(Date, `Total victims`) %>% 
+            group_by(format(as.Date(Date, format="%m/%d/%Y"),"%Y")) %>%
+            summarise(sum(`Total victims`)) 
+
+colnames(df_msy) <- c('Year','Total_Victims')
+
+# Plotting mass shooting victims per year in USA
+yw <- ggplot(data=df_msy, mapping = aes(x = Year, y = Total_Victims)) +
+        geom_bar(stat = "identity") + 
+        xlab("Year") + ylab("Number of Victims") + labs(title = "Mass shooting victims per year in USA") +
+        theme(axis.text.x = element_text(angle = 90)) 
+
+yw
+
+```
+
+We can see from the above that, there is a abrupt increase in the number of victims effected due to mass shooting in last three years.
+
+```{r}
+
+# Mass Shooting victims as per the geographic location
+statesUSA <- map_data("state")
+
+ms <- ggplot(data = statesUSA) + 
+        geom_polygon(aes(x = long, y = lat, group = group), fill = NA, color = "black") +
+        coord_map() + 
+        geom_point(data = na.omit(data_ms), aes(x =Longitude, y = Latitude, color = `Total victims`)) +
+        scale_x_continuous(limits = c(-125,-68)) +
+        scale_y_continuous(limits = c(25,50)) +
+        scale_colour_gradientn(colours = terrain.colors(10)) + 
+        labs(title = "Mass Shooting victims across geographic locations")
+
+ms
+
+```
+
+
+```{r}
+
+
+# Representing the column in a uniform notation
+data_ms$Gender <- ifelse(data_ms$Gender == 'Female','F',ifelse(data_ms$Gender == 'Male','M',ifelse(data_ms$Gender == 'Male/Female','M/F',ifelse(data_ms$Gender == 'Unknown','Unknown',NA))))
+
+data_hs <- data_ms %>%
+              group_by(tolower(`Mental Health Issues`), Gender) %>%
+              summarise(sum(`Total victims`))
+
+colnames(data_hs) <- c('Mental_Health_Issues','Gender','Total_Victims')
+
+# Plotting Mental Health status of Mass shooters
+mhs <- ggplot(data = data_hs, mapping = aes(x = Gender, y = Total_Victims)) + 
+        theme(axis.text.x = element_text(angle = 90)) +
+        geom_histogram(stat = "identity") + ylab("Total Number of Victims") +
+        facet_grid(~Mental_Health_Issues) + 
+        labs(title = "Mental Health status of Mass shooters")
+
+
+mhs
+
+```
+
+
+From the above, we can see that majority of mass shooters are men with metal health issues.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
